@@ -1,5 +1,6 @@
 package lk.ijse.userservice.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.userservice.dto.UserDTO;
 import lk.ijse.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,8 @@ public class UserController {
 
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> saveUser(@Valid @RequestBody UserDTO userDTO) {
         try {
             userService.registerUser(userDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
@@ -34,9 +34,8 @@ public class UserController {
 
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") String userId, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@Valid @PathVariable("id") String userId, @RequestBody UserDTO userDTO) {
         try {
             userDTO.setUserId(userId);
             userService.updateUser(userDTO);
@@ -48,9 +47,8 @@ public class UserController {
 
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/verify", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity verifyUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity verifyUser(@Valid @RequestBody UserDTO userDTO) {
         boolean isVerified = userService.verifyUser(userDTO);
         return isVerified ?
                 ResponseEntity.status(HttpStatus.OK).body(true) :
